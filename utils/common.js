@@ -54,10 +54,10 @@ class Common {
             };
 
             const info = await transporter.sendMail(mailOptions);
-            console.log(info);
+            console.log("Info: ", info);
             return { success: true, info };
         } catch (error) {
-            console.log(error);
+            console.log("Error Here: ", error);
             return { success: false, error };
         }
     }
@@ -194,9 +194,9 @@ class Common {
         }
     }
 
-    async get_admin_info(user_id){
+    async get_admin_info(admin_id){
         try{
-            const [res] = await database.query(`SELECT email_id, admin_id, profile_pic, `, [user_id]);
+            const [res] = await database.query(`SELECT email_id, admin_id from tbl_admin where admin_id = ?`, [admin_id]);
             return res[0];
         } catch(error){
             console.log(error.message);

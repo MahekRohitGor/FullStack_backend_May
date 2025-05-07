@@ -26,7 +26,7 @@ class Admin {
             if (!isValid) return;
 
             const response = await admin.login(request_data);
-            await common.sendEncryptedResponse(res, response_code.SUCCESS, response.message, response.data);
+            await common.sendEncryptedResponse(res, response.code, response.message, response.data);
         } catch (error) {
             console.error("LOGIN Error:", error);
             return common.sendEncryptedResponse(
@@ -64,7 +64,7 @@ class Admin {
             if (!isValid) return;
 
             const response = await admin.create_event(request_data);
-            await common.sendEncryptedResponse(res, response_code.SUCCESS, response.message, response.data);
+            await common.sendEncryptedResponse(res, response.code, response.message, response.data);
 
         } catch (error) {
             console.error("Create Event Error:", error);
@@ -104,7 +104,7 @@ class Admin {
             if (!isValid) return;
 
             const response = await admin.edit_event(request_data);
-            await common.sendEncryptedResponse(res, response_code.SUCCESS, response.message, response.data);
+            await common.sendEncryptedResponse(res, response.code, response.message, response.data);
 
         } catch (error) {
             console.error("Edit Product Error:", error);
@@ -120,7 +120,7 @@ class Admin {
     async event_listing(req, res) {
         try {
             const response = await admin.event_listing();
-            await common.sendEncryptedResponse(res, response_code.SUCCESS, response.message, response.data);
+            await common.sendEncryptedResponse(res, response.code, response.message, response.data);
         } catch (error) {
             console.error("Event Listing Error:", error.message);
             return common.sendEncryptedResponse(
@@ -151,7 +151,7 @@ class Admin {
             if (!isValid) return;
 
             const response = await admin.delete_event(request_data);
-            await common.sendEncryptedResponse(res, response_code.SUCCESS, response.message, response.data);
+            await common.sendEncryptedResponse(res, response.code, response.message, response.data);
 
         } catch (error) {
             console.error("Delete Event Error:", error);
@@ -185,7 +185,7 @@ class Admin {
             if (!isValid) return;
 
             const response = await admin.upload_image(request_data);
-            await common.sendEncryptedResponse(res, response_code.SUCCESS, response.message, response.data);
+            await common.sendEncryptedResponse(res, response.code, response.message, response.data);
 
         } catch (error) {
             console.error("Upload Image Error:", error);
@@ -201,7 +201,7 @@ class Admin {
     async show_analytics(req, res) {
         try {
             const response = await admin.show_analytics();
-            await common.sendEncryptedResponse(res, response_code.SUCCESS, response.message, response.data);
+            await common.sendEncryptedResponse(res, response.code, response.message, response.data);
         } catch (error) {
             console.error("Show Analytics Error:", error);
             return common.sendEncryptedResponse(

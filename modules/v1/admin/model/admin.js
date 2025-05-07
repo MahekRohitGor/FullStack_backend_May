@@ -12,6 +12,7 @@ class AdminModel {
             const is_login = await common.check_admin_login(request_data.email_id);
             if (!is_login) {
                 const admin_details = await common.getAdmin(request_data.email_id);
+                console.log(admin_details);
                 if (bcrypt.compareSync(request_data.password_, admin_details.password_)) {
                     const admin_token = jwt.sign(
                         { id: admin_details.admin_id },

@@ -31,7 +31,7 @@ class User {
             if (!isValid) return;
 
             const response = await user.signup(request_data);
-            await common.sendEncryptedResponse(res, response_code.SUCCESS, response.message, response.data);
+            await common.sendEncryptedResponse(res, response.code, response.message, response.data);
 
         } catch (error) {
             console.error("Signup Error:", error);
@@ -63,7 +63,7 @@ class User {
             if (!isValid) return;
 
             const response = await user.login(request_data);
-            await common.sendEncryptedResponse(res, response_code.SUCCESS, response.message, response.data);
+            await common.sendEncryptedResponse(res, response.code, response.message, response.data);
 
         } catch (error) {
             console.error("LOGIN Error:", error);
@@ -80,7 +80,7 @@ class User {
             try{
                 const user_id = req.owner_id;
                 const response = await user.logout(user_id);
-                await common.sendEncryptedResponse(res, response_code.SUCCESS, response.message, response.data);
+                await common.sendEncryptedResponse(res, response.code, response.message, response.data);
             } catch(error){
                 console.error("LOGOUT Error:", error);
                 return common.sendEncryptedResponse(
@@ -95,7 +95,7 @@ class User {
     async list_avail_events(req,res){
         try{
             const response = await user.list_avail_events();
-            await common.sendEncryptedResponse(res, response_code.SUCCESS, response.message, response.data);
+            await common.sendEncryptedResponse(res, response.code, response.message, response.data);
         } catch(error){
             console.error("List Events Error:", error);
             return common.sendEncryptedResponse(
@@ -110,7 +110,7 @@ class User {
     async list_events_id(req,res){
         try{
             const response = await user.list_events_id(req.params.id);
-            await common.sendEncryptedResponse(res, response_code.SUCCESS, response.message, response.data);
+            await common.sendEncryptedResponse(res, response.code, response.message, response.data);
         } catch(error){
             console.error("List Events Error:", error);
             return common.sendEncryptedResponse(
@@ -146,7 +146,7 @@ class User {
             if (!isValid) return;
 
             const response = await user.purchase_tickets(request_data, user_id);
-            await common.sendEncryptedResponse(res, response_code.SUCCESS, response.message, response.data);
+            await common.sendEncryptedResponse(res, response.code, response.message, response.data);
 
         } catch (error) {
             console.error("purchase_tickets Error:", error);
@@ -163,7 +163,7 @@ class User {
         try{
             const user_id = req.owner_id;
             const response = await user.previous_purchases(user_id);
-            await common.sendEncryptedResponse(res, response_code.SUCCESS, response.message, response.data);
+            await common.sendEncryptedResponse(res, response.code, response.message, response.data);
         } catch(error){
             console.error("previous_purchases Error:", error);
             return common.sendEncryptedResponse(

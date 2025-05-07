@@ -195,7 +195,7 @@ class UserModel {
 
     async list_avail_events() {
         try {
-            const [rows] = await database.query(`select e.event_id, e.event_title, e.event_desc, CAST(e.event_date AS DATE) as event_date, CAST(e.event_date AS TIME) as event_time, e.event_address, e.latitude, e.longitude, e.event_price, e.total_tickets_avail, group_concat(ei.image_link) as images, e.total_tickets_sold from tbl_event e inner join tbl_event_images ei on ei.event_id = e.event_id where now() < e.event_date group by e.event_id;`);
+            const [rows] = await database.query(`select e.event_id, e.event_title, e.event_desc, CAST(e.event_date AS DATE) as event_date, CAST(e.event_date AS TIME) as event_time, e.event_address, e.latitude, e.longitude, e.event_price, e.total_tickets_avail, group_concat(ei.image_link) as images, e.total_tickets_sold from tbl_event e left join tbl_event_images ei on ei.event_id = e.event_id where now() < e.event_date and e.is_deleted = 0 and e.is_active = 1 group by e.event_id;`);
 
             if (rows && rows.length > 0) {
                 return {
@@ -223,7 +223,7 @@ class UserModel {
 
     async list_events_id(event_id) {
         try {
-            const [rows] = await database.query(`select e.event_id, e.event_title, e.event_desc, CAST(e.event_date AS DATE) as event_date, CAST(e.event_date AS TIME) as event_time, e.event_address, e.latitude, e.longitude, e.event_price, e.total_tickets_avail, group_concat(ei.image_link) as images, e.total_tickets_sold from tbl_event e inner join tbl_event_images ei on ei.event_id = e.event_id where now() < e.event_date and e.event_id = ? group by e.event_id;`, [event_id]);
+            const [rows] = await database.query(`select e.event_id, e.event_title, e.event_desc, CAST(e.event_date AS DATE) as event_date, CAST(e.event_date AS TIME) as event_time, e.event_address, e.latitude, e.longitude, e.event_price, e.total_tickets_avail, group_concat(ei.image_link) as images, e.total_tickets_sold from tbl_event e left join tbl_event_images ei on ei.event_id = e.event_id where now() < e.event_date and e.event_id = ? and e.is_deleted = 0 and e.is_active = 1 group by e.event_id;`, [event_id]);
 
             if (rows && rows.length > 0) {
                 return {
@@ -288,7 +288,8 @@ class UserModel {
 
                             try {
                                 const htmlMessage = ticketConfirmationEmail(ticket_data);
-                                await common.sendMail(subject, email, htmlMessage);
+                                const resp = await common.sendMail(subject, email, htmlMessage);
+                                console.log("Response: ", resp);
                                 console.log("Email sent successfully!");
                             } catch (error) {
                                 console.error("Error sending email:", error);
@@ -342,11 +343,10 @@ class UserModel {
 
     async previous_purchases(user_id) {
         try {
-
-            const [rows] = await database.query(`select p.user_id, p.amount, p.purchase_status, 
+            const [rows] = await database.query(`select p.purchase_id, p.user_id, p.amount, p.purchase_status, 
                     p.payment_type, p.qty, p.qrcode, e.event_desc, e.event_title, CAST(e.event_date AS DATE) as event_date, 
                     CAST(e.event_date AS TIME) as event_time, e.latitude, e.longitude
-                    from tbl_purchase p inner join tbl_event e on e.event_id = p.event_id where p.purchase_status = "completed" and user_id = ?;`, [user_id]);
+                    from tbl_purchase p inner join tbl_event e on e.event_id = p.event_id where p.purchase_status = "completed" and user_id = ? and e.is_deleted = 0 and e.is_active = 1;`, [user_id]);
             
             if(rows && rows.length > 0){
                 return {
@@ -356,9 +356,9 @@ class UserModel {
                 }
             } else{
                 return {
-                    code: response_code.NOT_FOUND,
+                    code: response_code.SUCCESS,
                     message: "Order History Not Found",
-                    data: rows
+                    data: null
                 }
             }
         } catch (error) {
