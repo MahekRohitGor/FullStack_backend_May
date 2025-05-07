@@ -213,6 +213,23 @@ class Admin {
         }
     }
 
+    async logout(req,res){
+        try{
+            const admin_id = req.owner_id;
+            console.log("Admin ID: ", admin_id);
+            const response = await admin.logout(admin_id);
+            await common.sendEncryptedResponse(res, response.code, response.message, response.data);
+        } catch(error){
+            console.error("LOGOUT Error:", error);
+            return common.sendEncryptedResponse(
+                res,
+                response_code.INTERNAL_SERVER_ERROR,
+                t("internal_server_error") || "Something went wrong, please try again later.",
+                {}
+            );
+        }
+}
+
 }
 
 module.exports = new Admin();

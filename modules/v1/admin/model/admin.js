@@ -312,6 +312,43 @@ class AdminModel {
         }
     }
 
+    async logout(admin_id) {
+            try {
+                const admin_data = await common.get_admin_info(admin_id);
+                if (admin_data) {
+                    const [data] = await database.query(`UPDATE tbl_admin set is_login = 0 where admin_id = ?`, [admin_id]);
+                    if (data.affectedRows > 0) {
+                        return {
+                            code: response_code.SUCCESS,
+                            message: "Logout Success",
+                            data: admin_id
+                        }
+                    } else {
+                        return {
+                            code: response_code.OPERATION_FAILED,
+                            message: "Failed to Update Admin Login Status",
+                            data: null
+                        }
+                    }
+                }
+                else {
+                    return {
+                        code: response_code.NOT_FOUND,
+                        message: "Admin Not Found",
+                        data: null
+                    }
+                }
+    
+            } catch (error) {
+                console.log(error.message);
+                return {
+                    code: response_code.OPERATION_FAILED,
+                    message: "Internal Server Error",
+                    data: null
+                }
+            }
+        }
+
 }
 
 module.exports = new AdminModel();

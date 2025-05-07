@@ -8,6 +8,7 @@ const admin = (app) => {
     app.delete("/v1/admin/event/delete", admins.delete_event);
     app.post("/v1/admin/event/upload", admins.upload_image);
     app.get("/v1/admin/dashboard", admins.show_analytics);
+    app.post("/v1/admin/logout", admins.logout);
 }
 
 module.exports = admin;
